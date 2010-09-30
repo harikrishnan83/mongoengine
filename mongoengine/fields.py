@@ -385,7 +385,7 @@ class GeoLocationField(DictField):
         return {'x': value[0], 'y': value[1]}
     
     def to_python(self, value):
-        return value.keys()
+        return value
 
 class ReferenceField(BaseField):
     """A reference to a document that will be automatically dereferenced on
