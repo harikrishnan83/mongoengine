@@ -271,6 +271,28 @@ class FieldTest(unittest.TestCase):
         post.info = {'title': 'test'}
         post.validate()
 
+    def test_geolocation_validation(self):
+        """Ensure that geolocation types work as expected.
+        """
+        class BlogPost(Document):
+            location = GeoLocationField()
+
+        post = BlogPost()
+        post.location = [1]
+        self.assertRaises(ValidationError, post.validate)
+
+        post.location = [1,2,3]
+        self.assertRaises(ValidationError, post.validate)
+		
+        post.location = [1,2]
+        post.validate()
+        post.save()
+        post = BlogPost.objects.first()
+
+        self.assertEquals({'x':1,'y':2}, post.location)
+        BlogPost.drop_collection()
+		
+		
     def test_embedded_document_validation(self):
         """Ensure that invalid embedded documents cannot be assigned to
         embedded document fields.
